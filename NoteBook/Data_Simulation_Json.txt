@@ -1,0 +1,67 @@
+[
+  '{{repeat(100000, 7)}}',
+  {
+    _id: '{{index()}}',
+    gender: '{{gender()}}',
+    age: '{{integer(20,40)}}',
+    gouvernorat: function(tags){
+      var  gouvernorats= ['Tunis', 'Ariana', 'B.Arous', 'Manouba', 'Sfax','Sousse','Nabeul', 'Monastir', 'Bizerte','Gabes','Mahdia','Le Kef','Zaghouan'];
+      return gouvernorats[tags.integer(0, gouvernorats.length - 1)];
+  },secteur_activite: function (tags) {
+    var professions=[];
+    if (!(this.gender.localeCompare("female"))){
+        professions = ['Immobilier', 'Banque', 'Tourisme', 'Santé', 'Education','Femme au foyer'];
+        }
+      else  professions = ['Banque', 'Agriculture', 'Automobile ','Travaux Publics', 'Immobilier', 'Santé', 'Education','Autre'];
+      return professions[tags.integer(0, professions.length - 1)];
+    },
+    date_permis: function(tags){
+      var annee=2021-(Math.round((Math.random()*(this.age-18))));
+      var jour =Math.round( Math.random()*27 + 1);
+      var mois = Math.round(Math.random()*12 + 1);
+      var date="";
+      return jour.toString()+"/"+mois.toString()+"/"+annee.toString();
+    },
+    compagnie_actuelle: function (tags) {
+      var compagnies = {'Attakafulia':31, 'El amana takaful':43, 'Zitouna takaful':47,'Ctama': 38, 'MAE': 45, 'Bh assurance':40,'LLoyd tunisien':85, 'Assurance Ami': 130, 'Carte':45, 'Maghrebia':85, 'Astree':72, 'Gat':83,'Comar':117, 'Star' :171};
+      var compagnies_ponderes=[];
+      for (var key in compagnies){
+        var value = compagnies[key];
+        for (var i=0;i<value;i++){
+          compagnies_ponderes.push(key);
+        }
+      }
+      for (var i=0;i<compagnies_ponderes.length;i++){
+        var tampon = compagnies_ponderes[i];
+        var random_number = Math.round( Math.random()*1031);
+        compagnies_ponderes[random_number]=compagnies_ponderes[i];
+        compagnies_ponderes[random_number]=tampon;
+      }
+      return compagnies_ponderes[tags.integer(0, compagnies_ponderes.length - 1)];
+    },
+    usage: function(tags){
+      var  usages=[];
+      if  (!(this.secteur_activite.localeCompare("Autre")))
+      {
+        usages= ['Taxi', 'Louage','Auto-Ecole'];
+      }
+      else usages = ['Privé','Professionnel'];
+     
+      
+      return usages[tags.integer(0, usages.length - 1)];
+  },
+    age_vehicule:'{{integer(1,20)}}',
+    nb_sinistres:'{{integer(0,4)}}',
+    ancienne_compagnie: function(tags){
+      var compagnies = ['Attakafulia', 'El amana takaful', 'Zitouna takaful','Ctama', 'MAE', 'Bh assurance', 'LLoyd tunisien', 'Biat-assurance','Assurance Ami', 'Carte', 'Maghrebia', 'Astree', 'Gat','Comar', 'Star','Aucune' ];
+      var ancienne_compagnie=compagnies[tags.integer(0, compagnies.length - 1)];
+      while (!(this.compagnie_actuelle.localeCompare(ancienne_compagnie))){
+        ancienne_compagnie=compagnies[tags.integer(0, compagnies.length - 1)];
+      }
+      return ancienne_compagnie;
+    },
+    satisfaction :function(tags){
+      return Math.round( Math.random()*4+1);
+    }
+  }
+]
